@@ -1,0 +1,41 @@
+/* This file contains styles to ensure the website is responsive and looks good on both desktop and mobile devices. */
+
+@media (max-width: 768px) {
+    body {
+        font-size: 14px;
+    }
+
+    .central-section {
+        padding: 20px;
+    }
+
+    .birthday-message {
+        font-size: 24px;
+        text-align: center;
+    }
+
+    img {
+        width: 100%;
+        height: auto;
+    }
+}
+
+@media (min-width: 769px) {
+    body {
+        font-size: 16px;
+    }
+
+    .central-section {
+        padding: 40px;
+    }
+
+    .birthday-message {
+        font-size: 36px;
+        text-align: left;
+    }
+
+    img {
+        max-width: 50%;
+        height: auto;
+    }
+}

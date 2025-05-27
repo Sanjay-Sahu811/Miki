@@ -1,0 +1,657 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Coming Soon</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Dancing+Script&family=Poppins:wght@300;600&display=swap');
+
+    /* Reset and base */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    body, html {
+      height: 100%;
+      font-family: 'Poppins', sans-serif;
+      background: #1a1a2e;
+      color: #fff;
+      overflow: hidden;
+    }
+
+    /* --- COMING SOON PAGE --- */
+    #coming-soon {
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      background: linear-gradient(135deg, #f2709c, #ff9472);
+      background-size: 400% 400%;
+      animation: gradientBG 20s ease infinite;
+      z-index: 50;
+      user-select: none;
+      text-align: center;
+      padding: 0 20px;
+    }
+
+    #coming-soon h1 {
+      font-family: 'Dancing Script', cursive;
+      font-size: 4rem;
+      margin-bottom: 15px;
+      text-shadow: 0 0 12px rgba(255, 255, 255, 0.7);
+    }
+
+    #countdown {
+      font-size: 2.8rem;
+      letter-spacing: 3px;
+      font-weight: 600;
+      text-shadow: 0 0 8px rgba(255, 255, 255, 0.8);
+    }
+
+    #countdown > div {
+      display: inline-block;
+      min-width: 65px;
+    }
+    #countdown span {
+      display: block;
+      font-size: 1.35rem;
+      font-weight: 400;
+      margin-top: 5px;
+      opacity: 0.85;
+      font-family: 'Poppins', sans-serif;
+    }
+
+    /* --- BIRTHDAY PAGE --- */
+    #birthday-page {
+      display: none;
+      height: 100%;
+      width: 100%;
+      position: relative;
+      background: linear-gradient(135deg, #f8cdda, #1fa2ff);
+      background-size: 400% 400%;
+      animation: gradientBG 20s ease infinite;
+      color: #fff;
+      user-select: none;
+      overflow: hidden;
+    }
+
+    @keyframes gradientBG {
+      0%{background-position:0% 50%;}
+      50%{background-position:100% 50%;}
+      100%{background-position:0% 50%;}
+    }
+
+    /* Shared hidden elements must not interfere - keep body no scroll */
+
+    /* Floating hearts container (bottom to top) */
+    #hearts-container {
+      pointer-events: none;
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      overflow: hidden;
+      z-index: 0;
+    }
+    .heart {
+      position: absolute;
+      width: 20px;
+      height: 20px;
+      background: rgba(255, 0, 0, 0.75);
+      opacity: 0.8;
+      transform: rotate(-45deg);
+      animation-timing-function: linear;
+    }
+    .heart:before,
+    .heart:after {
+      content: "";
+      position: absolute;
+      width: 20px;
+      height: 20px;
+      background: rgba(255, 0, 0, 0.75);
+      border-radius: 50%;
+    }
+    .heart:before {
+      top: -10px;
+      left: 0;
+    }
+    .heart:after {
+      left: 10px;
+      top: 0;
+    }
+
+    /* Falling hearts container (top to bottom) */
+    #falling-hearts-container {
+      pointer-events: none;
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      overflow: hidden;
+      z-index: 1;
+    }
+    .falling-heart {
+      position: absolute;
+      width: 15px;
+      height: 15px;
+      background: rgba(255, 0, 0, 0.75);
+      opacity: 0.6;
+      transform: rotate(-45deg);
+      animation-timing-function: linear;
+      filter: drop-shadow(0 0 1px #d40000);
+    }
+    .falling-heart:before,
+    .falling-heart:after {
+      content: "";
+      position: absolute;
+      width: 15px;
+      height: 15px;
+      background: rgba(255, 0, 0, 0.75);
+      border-radius: 50%;
+    }
+    .falling-heart:before {
+      top: -7.5px;
+      left: 0;
+    }
+    .falling-heart:after {
+      left: 7.5px;
+      top: 0;
+    }
+
+    /* Confetti container for party poppers bottom to top */
+    #confetti-container {
+      pointer-events: none;
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      overflow: visible;
+      z-index: 5;
+    }
+    .confetti {
+      position: absolute;
+      width: 8px;
+      height: 14px;
+      background-color: #ff4b6e;
+      opacity: 0.9;
+      border-radius: 2px;
+      will-change: transform, opacity;
+      box-shadow: 0 0 3px rgba(255, 255, 255, 0.4);
+    }
+    .confetti.color1 { background-color: #ff4b6e; }
+    .confetti.color2 { background-color: #f9cd70; }
+    .confetti.color3 { background-color: #8affa3; }
+    .confetti.color4 { background-color: #ff79c6; }
+    .confetti.color5 { background-color: #70d6ff; }
+
+    /* Fireworks container centered */
+    #fireworks-container {
+      pointer-events: none;
+      position: fixed;
+      top: 50%; left: 50%;
+      width: 300px;
+      height: 300px;
+      margin-left: -150px;
+      margin-top: -150px;
+      overflow: visible;
+      z-index: 7;
+    }
+    .firework-spark {
+      position: absolute;
+      width: 6px;
+      height: 6px;
+      background-color: #ffd400;
+      border-radius: 50%;
+      box-shadow: 0 0 8px #ffcc00;
+      will-change: transform, opacity;
+    }
+    .firework-spark.color1 { background-color: #ff5353; box-shadow: 0 0 10px #ff5353; }
+    .firework-spark.color2 { background-color: #f9cd70; box-shadow: 0 0 10px #f9cd70; }
+    .firework-spark.color3 { background-color: #8affac; box-shadow: 0 0 10px #8affac; }
+    .firework-spark.color4 { background-color: #ff7abf; box-shadow: 0 0 10px #ff7abf; }
+    .firework-spark.color5 { background-color: #70cfff; box-shadow: 0 0 10px #70cfff; }
+
+    /* Confetti container for click fireworks (positioned absolute in body) */
+    #click-fireworks-container {
+      pointer-events: none;
+      position: fixed;
+      top: 0; left: 0; width: 100vw; height: 100vh;
+      overflow: visible;
+      z-index: 15;
+    }
+
+    /* Central container inside birthday page */
+    #central-container {
+      position: relative;
+      z-index: 10;
+      width: 90vw;
+      max-width: 420px;
+      background: rgba(255 255 255 / 0.15);
+      border-radius: 15px;
+      backdrop-filter: blur(15px);
+      box-shadow: 0 8px 32px 0 rgba(255, 255, 255, 0.1);
+      padding: 25px 20px 40px;
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      height: 100vh;
+      justify-content: center;
+    }
+
+    #birthday-message {
+      font-family: 'Dancing Script', cursive;
+      font-size: 3.4rem;
+      color: #ffe1e9;
+      margin-top: 20px;
+      text-shadow:
+        0 0 8px rgba(255, 0, 0, 0.9),
+        0 0 15px rgba(200, 0, 0, 0.7);
+      user-select: text;
+    }
+
+    #wife-pic {
+      width: 200px;
+      height: 200px;
+      border-radius: 50%;
+      border: 4px solid #ff0000;
+      object-fit: cover;
+      box-shadow: 0 8px 20px rgba(255, 50, 50, 0.6);
+      user-select: none;
+    }
+
+    /* Play/pause button container */
+    #audio-control {
+      margin-top: 30px;
+      display: flex;
+      justify-content: center;
+    }
+
+    #btn-playpause {
+      border: none;
+      background-color: rgba(255, 0, 0, 0.8);
+      color: #7f0000;
+      font-weight: 700;
+      font-size: 1.1rem;
+      padding: 10px 26px;
+      border-radius: 30px;
+      cursor: pointer;
+      box-shadow:
+        0 5px 15px rgba(255, 50, 50, 0.6);
+      user-select: none;
+      transition: background-color 0.3s, color 0.3s;
+    }
+    #btn-playpause:hover {
+      background-color: #ff3333;
+      color: white;
+      box-shadow:
+        0 8px 25px rgba(255, 0, 0, 0.8);
+    }
+
+    /* Responsive */
+    @media (max-width: 480px) {
+      #birthday-message {
+        font-size: 2.4rem;
+      }
+      #wife-pic {
+        width: 150px;
+        height: 150px;
+      }
+      #central-container {
+        max-width: 90vw;
+        padding: 20px 15px 30px;
+      }
+      #fireworks-container {
+        width: 200px;
+        height: 200px;
+        margin-left: -100px;
+        margin-top: -100px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Coming Soon Page -->
+  <div id="coming-soon" role="main" aria-live="polite" aria-label="Coming Soon Landing Page">
+    <h1>Coming Soon</h1>
+    <div id="countdown" role="timer" aria-live="polite" aria-atomic="true">
+      <div><span id="days">00</span><span>Days</span></div>
+      <div><span id="hours">00</span><span>Hours</span></div>
+      <div><span id="minutes">00</span><span>Minutes</span></div>
+      <div><span id="seconds">00</span><span>Seconds</span></div>
+    </div>
+  </div>
+
+  <!-- Birthday Page -->
+  <div id="birthday-page" aria-label="Birthday greeting page" style="display:none;">
+    <div id="hearts-container" aria-hidden="true"></div>
+    <div id="falling-hearts-container" aria-hidden="true"></div>
+    <div id="confetti-container" aria-hidden="true"></div>
+    <div id="fireworks-container" aria-hidden="true"></div>
+    <div id="click-fireworks-container" aria-hidden="true"></div>
+
+    <div id="central-container" aria-label="Birthday greeting and photo">
+      <img
+        id="wife-pic"
+        src="Miki.jpg"
+        alt="Portrait of my wife" />
+      <div id="birthday-message" aria-live="polite" role="text"></div>
+      <!-- <div id="audio-control">
+        <button id="btn-playpause" aria-pressed="false" aria-label="Play background music">Play Music</button>
+      </div> -->
+    </div>
+
+    <audio id="bg-music" loop preload="auto" src="https://cdn.pixabay.com/download/audio/2021/09/10/audio_425588a9be.mp3?filename=romantic-piano-by-moonlight-11312.mp3"></audio>
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+  <script>
+    // Countdown target date/time - customize here (YYYY, M-1, D, H, M, S)
+    // const countdownTarget = new Date(Date.now() + 10 * 1000); 
+    const countdownTarget = new Date(2025, 0o4 ,31,0,0,0);  // Example: June 30, 2025 at midnight
+    // For demo, 15 seconds from now. Replace with e.g., new Date(2024, 11, 25, 0, 0, 0)
+
+    // Get countdown elements
+    const daysElem = document.getElementById('days');
+    const hoursElem = document.getElementById('hours');
+    const minutesElem = document.getElementById('minutes');
+    const secondsElem = document.getElementById('seconds');
+
+    // Coming soon and birthday container refs
+    const comingSoonElem = document.getElementById('coming-soon');
+    const birthdayPageElem = document.getElementById('birthday-page');
+
+    // Update countdown timer display
+    function updateCountdown(){
+      const now = new Date();
+      let diff = countdownTarget - now;
+
+      if(diff <= 0) {
+        // End countdown
+        daysElem.textContent = '00';
+        hoursElem.textContent = '00';
+        minutesElem.textContent = '00';
+        secondsElem.textContent = '00';
+        return false;
+      }
+
+      const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+      diff -= days * 1000 * 60 * 60 * 24;
+      const hours = Math.floor(diff / (1000 * 60 * 60));
+      diff -= hours * 1000 * 60 * 60;
+      const minutes = Math.floor(diff / (1000 * 60));
+      diff -= minutes * 1000 * 60;
+      const seconds = Math.floor(diff / 1000);
+
+      daysElem.textContent = days.toString().padStart(2, '0');
+      hoursElem.textContent = hours.toString().padStart(2, '0');
+      minutesElem.textContent = minutes.toString().padStart(2, '0');
+      secondsElem.textContent = seconds.toString().padStart(2, '0');
+
+      return true;
+    }
+
+    // Countdown interval and interval handle
+    let countdownInterval = null;
+
+    function startCountdown(){
+      if(updateCountdown() === false){
+        countdownFinished();
+        return;
+      }
+      countdownInterval = setInterval(() => {
+        if(updateCountdown() === false){
+          clearInterval(countdownInterval);
+          countdownFinished();
+        }
+      }, 1000);
+    }
+
+    // Fade out coming soon and fade in birthday page using GSAP
+    function countdownFinished(){
+      gsap.to(comingSoonElem, {opacity: 0, duration: 1.5, ease: "power2.inOut", onComplete: () => {
+        comingSoonElem.style.display = 'none';
+        birthdayPageElem.style.display = 'block';
+        gsap.fromTo(birthdayPageElem, {opacity:0}, {opacity:1, duration:1.5, ease:"power2.inOut", onComplete: initBirthdayPage});
+      }});
+    }
+
+    // Initialize birthday page content and animations
+    function initBirthdayPage(){
+      // Birthday message variable
+      const birthdayMessage = "Happy Birthday, My Love!";
+      const messageElem = document.getElementById('birthday-message');
+      messageElem.textContent = birthdayMessage;
+
+      // Some constants
+      const wifePic = document.getElementById('wife-pic');
+      const audio = document.getElementById('bg-music');
+      const btnPlayPause = document.getElementById('btn-playpause');
+      const heartsContainer = document.getElementById('hearts-container');
+      const fallingHeartsContainer = document.getElementById('falling-hearts-container');
+      const confettiContainer = document.getElementById('confetti-container');
+      const fireworksContainer = document.getElementById('fireworks-container');
+      const clickFireworksContainer = document.getElementById('click-fireworks-container');
+
+      // Animate wife pic and message & button fade in
+      gsap.fromTo(wifePic, 
+        {opacity: 0, scale: 0.8},
+        {opacity: 1, scale: 1, duration: 1.5, ease: "power3.out"}
+      );
+      gsap.fromTo(messageElem,
+        {opacity: 0, y: 40},
+        {opacity: 1, y: 0, duration: 1.5, delay: 0.4, ease: "power3.out"}
+      );
+      gsap.fromTo(btnPlayPause,
+        {opacity: 0, y: 20},
+        {opacity: 1, y: 0, duration: 1, delay: 0.8, ease: "power3.out"}
+      );
+
+      // Play/pause audio logic
+    //   btnPlayPause.addEventListener('click', () => {
+    //     if (audio.paused) {
+    //       audio.play();
+    //     } else {
+    //       audio.pause();
+    //     }
+    //     updateButton();
+    //   });
+
+    //   function updateButton(){
+    //     if (audio.paused) {
+    //       btnPlayPause.textContent = "Miki";
+    //       btnPlayPause.setAttribute('aria-pressed', 'false');
+    //       btnPlayPause.setAttribute('aria-label', 'Play background music');
+    //     } else {
+    //       btnPlayPause.textContent = "Pause Music";
+    //       btnPlayPause.setAttribute('aria-pressed', 'true');
+    //       btnPlayPause.setAttribute('aria-label', 'Pause background music');
+    //     }
+    //   }
+
+      // Try autoplay music on load of birthday page
+    //   audio.play().then(updateButton).catch(updateButton);
+
+      // Hearts floating bottom to top
+      function createHeart() {
+        const heart = document.createElement('div');
+        heart.classList.add('heart');
+        const size = 12 + Math.random() * 18;
+        heart.style.width = size + 'px';
+        heart.style.height = size + 'px';
+        heart.style.left = Math.random() * 100 + 'vw';
+        heart.style.bottom = '-30px';
+        heart.style.opacity = (0.25 + Math.random() * 0.5).toFixed(2);
+
+        heartsContainer.appendChild(heart);
+
+        const duration = 6 + Math.random() * 7;
+        gsap.to(heart, {
+          y: '-110vh',
+          x: `+=${(Math.random() * 40) - 20}px`,
+          opacity: 0,
+          rotation: (Math.random() * 360),
+          duration: duration,
+          ease: 'linear',
+          onComplete: () => {
+            heart.remove();
+          }
+        });
+      }
+      setInterval(createHeart, 350);
+
+      // Hearts falling top to bottom
+      function createFallingHeart() {
+        const fallingHeart = document.createElement('div');
+        fallingHeart.classList.add('falling-heart');
+        const size = 10 + Math.random() * 12;
+        fallingHeart.style.width = size + 'px';
+        fallingHeart.style.height = size + 'px';
+        fallingHeart.style.left = Math.random() * 100 + 'vw';
+        fallingHeart.style.top = '-30px';
+        fallingHeart.style.opacity = 0.5 + Math.random() * 0.4;
+
+        fallingHeartsContainer.appendChild(fallingHeart);
+
+        const duration = 8 + Math.random() * 6;
+        const driftX = (Math.random() * 80) - 40;
+
+        gsap.to(fallingHeart, {
+          y: '110vh',
+          x: `+=${driftX}px`,
+          opacity: 0,
+          rotation: (Math.random() * 360),
+          duration: duration,
+          ease: 'linear',
+          onComplete: () => {
+            fallingHeart.remove();
+          }
+        });
+      }
+      setInterval(createFallingHeart, 400);
+
+      // Confetti for party poppers
+      const confettiColors = ['color1', 'color2', 'color3', 'color4', 'color5'];
+
+      function fireConfetti(x, y, count = 30) {
+        for (let i = 0; i < count; i++) {
+          createConfettiParticle(x, y);
+        }
+      }
+
+      function createConfettiParticle(originX, originY) {
+        const confetti = document.createElement('div');
+        confetti.classList.add('confetti');
+        const colorClass = confettiColors[Math.floor(Math.random() * confettiColors.length)];
+        confetti.classList.add(colorClass);
+        confetti.style.left = originX + 'px';
+        confetti.style.top = originY + 'px';
+        confettiContainer.appendChild(confetti);
+
+        const angle = (Math.random() * Math.PI / 2) - Math.PI / 4;
+        const distance = 120 + Math.random() * 80;
+        const duration = 1.4 + Math.random() * 0.8;
+        const rotateStart = Math.random() * 360;
+        const rotateEnd = rotateStart + (Math.random() > 0.5 ? 720 : -720);
+
+        gsap.to(confetti, {
+          x: Math.cos(angle) * distance,
+          y: -Math.sin(angle) * distance,
+          rotation: rotateEnd,
+          opacity: 0,
+          scale: 0.6,
+          duration: duration,
+          ease: "power3.out",
+          onComplete: () => confetti.remove()
+        });
+      }
+
+      function firePoppersFromBottom() {
+        const x = window.innerWidth / 2;
+        const y = window.innerHeight + 10;
+        fireConfetti(x, y, 30);
+      }
+      setInterval(firePoppersFromBottom, 12000);
+      setTimeout(firePoppersFromBottom, 2200);
+
+      // Fireworks center
+      const fireworkColors = ['color1', 'color2', 'color3', 'color4', 'color5'];
+
+      function createFireworkSpark(cx, cy) {
+        const spark = document.createElement('div');
+        spark.classList.add('firework-spark');
+        const colorClass = fireworkColors[Math.floor(Math.random() * fireworkColors.length)];
+        spark.classList.add(colorClass);
+        spark.style.left = cx + 'px';
+        spark.style.top = cy + 'px';
+        fireworksContainer.appendChild(spark);
+
+        const angle = Math.random() * 2 * Math.PI;
+        const distance = 100 + Math.random() * 100;
+        const duration = 1.3 + Math.random() * 0.9;
+        const scaleEnd = 0.1 + Math.random() * 0.3;
+
+        gsap.to(spark, {
+          x: Math.cos(angle) * distance,
+          y: Math.sin(angle) * distance,
+          scale: scaleEnd,
+          opacity: 0,
+          duration: duration,
+          ease: "power2.out",
+          onComplete: () => spark.remove()
+        });
+      }
+
+      function launchFirework() {
+        const cx = fireworksContainer.clientWidth / 2;
+        const cy = fireworksContainer.clientHeight / 2;
+        const sparksCount = 25 + Math.floor(Math.random() * 15);
+        for (let i = 0; i < sparksCount; i++) {
+          setTimeout(() => createFireworkSpark(cx, cy), i * 20);
+        }
+      }
+      setInterval(launchFirework, 9000 + Math.random() * 3000);
+      setTimeout(launchFirework, 3500);
+
+      // Click fireworks anywhere
+      function createClickFireworkSpark(cx, cy) {
+        const spark = document.createElement('div');
+        spark.classList.add('firework-spark');
+        const colorClass = fireworkColors[Math.floor(Math.random() * fireworkColors.length)];
+        spark.classList.add(colorClass);
+        spark.style.left = cx + 'px';
+        spark.style.top = cy + 'px';
+        clickFireworksContainer.appendChild(spark);
+
+        const angle = Math.random() * 2 * Math.PI;
+        const distance = 80 + Math.random() * 80;
+        const duration = 1 + Math.random() * 1;
+        const scaleEnd = 0.1 + Math.random() * 0.3;
+
+        gsap.to(spark, {
+          x: Math.cos(angle) * distance,
+          y: Math.sin(angle) * distance,
+          scale: scaleEnd,
+          opacity: 0,
+          duration: duration,
+          ease: "power2.out",
+          onComplete: () => spark.remove()
+        });
+      }
+
+      function launchClickFirework(cx, cy) {
+        const sparksCount = 20 + Math.floor(Math.random() * 20);
+        for (let i = 0; i < sparksCount; i++) {
+          setTimeout(() => createClickFireworkSpark(cx, cy), i * 15);
+        }
+      }
+      document.body.addEventListener('click', (e) => {
+        launchClickFirework(e.clientX, e.clientY);
+      });
+    }
+
+    // Start countdown on load
+    startCountdown();
+  </script>
+</body>
+</html>
+
