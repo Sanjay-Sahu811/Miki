@@ -279,6 +279,7 @@
 
     /* Play/pause button container */
     #audio-control {
+      display: none;
       margin-top: 30px;
       display: flex;
       justify-content: center;
@@ -361,9 +362,9 @@
         src="miki.jpg"
         alt="Portrait of my wife" />
       <div id="birthday-message" aria-live="polite" role="text"></div>
-      <!-- <div id="audio-control">
+      <div id="audio-control">
         <button id="btn-playpause" aria-pressed="false" aria-label="Play background music">Play Music</button>
-      </div> -->
+      </div>
     </div>
     <audio id="background-music" autoplay loop><source src="song.mp3" type="audio/mpeg"></audio>
     </div>
@@ -500,11 +501,46 @@
       const wifePic = document.getElementById('wife-pic');
       const audio = document.getElementById('background-music');
       const btnPlayPause = document.getElementById('btn-playpause');
+      const audioControl = document.getElementById('audio-control');
       const heartsContainer = document.getElementById('hearts-container');
       const fallingHeartsContainer = document.getElementById('falling-hearts-container');
       const confettiContainer = document.getElementById('confetti-container');
       const fireworksContainer = document.getElementById('fireworks-container');
       const clickFireworksContainer = document.getElementById('click-fireworks-container');
+
+      // Try autoplay music on load of birthday page
+      try {
+        audio.currentTime = 0;
+        audio.play().then(() => {
+          // Autoplay worked, hide button
+          if(audioControl) audioControl.style.display = 'none';
+        }).catch(() => {
+          // Autoplay blocked, show button
+          if(audioControl) audioControl.style.display = 'flex';
+        });
+      } catch (e) {
+        // Ignore errors
+      }
+
+      // Play/pause logic
+      btnPlayPause.addEventListener('click', () => {
+        if (audio.paused) {
+          audio.play();
+          btnPlayPause.textContent = "Pause Music";
+          btnPlayPause.setAttribute('aria-pressed', 'true');
+          btnPlayPause.setAttribute('aria-label', 'Pause background music');
+        } else {
+          audio.pause();
+          btnPlayPause.textContent = "Play Music";
+          btnPlayPause.setAttribute('aria-pressed', 'false');
+          btnPlayPause.setAttribute('aria-label', 'Play background music');
+        }
+      });
+
+      // Optionally, hide the button after music starts
+      audio.addEventListener('play', () => {
+        if(audioControl) audioControl.style.display = 'none';
+      });
 
       // Animate wife pic and message & button fade in
       gsap.fromTo(wifePic, 
@@ -515,38 +551,6 @@
         {opacity: 0, y: 20},
         {opacity: 1, y: 0, duration: 1, delay: 0.8, ease: "power3.out"}
       );
-
-      // Play/pause audio logic
-    //   btnPlayPause.addEventListener('click', () => {
-    //     if (audio.paused) {
-    //       audio.play();
-    //     } else {
-    //       audio.pause();
-    //     }
-    //     updateButton();
-    //   });
-
-    //   function updateButton(){
-    //     if (audio.paused) {
-    //       btnPlayPause.textContent = "Miki";
-    //       btnPlayPause.setAttribute('aria-pressed', 'false');
-    //       btnPlayPause.setAttribute('aria-label', 'Play background music');
-    //     } else {
-    //       btnPlayPause.textContent = "Pause Music";
-    //       btnPlayPause.setAttribute('aria-pressed', 'true');
-    //       btnPlayPause.setAttribute('aria-label', 'Pause background music');
-    //     }
-    //   }
-
-      // Try autoplay music on load of birthday page
-      try {
-        audio.currentTime = 0;
-        audio.play().catch(() => {
-          // Autoplay might be blocked; optionally show a play button or ignore
-        });
-      } catch (e) {
-        // Ignore errors
-      }
 
       // Hearts floating bottom to top
       function createHeart() {
